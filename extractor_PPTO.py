@@ -19,9 +19,9 @@ def write_parents_títulos(df_títulos):
         if título[0] < df_títulos.shape[0] - 1:
             parent_depth = título[4] - 1
             posible_parents = df_títulos[df_títulos.depth == parent_depth]  # query in pandas
-            posible_parents = posible_parents[posible_parents.títulos_ID < título[1]]
+            posible_parents = posible_parents[posible_parents.ID < título[1]]
             if not posible_parents.empty:
-                parent_ID = posible_parents.títulos_ID.iloc[-1]
+                parent_ID = posible_parents.ID.iloc[-1]
                 df_títulos.iloc[título[0], 4] = parent_ID
             else:
                 parent_ID = 0 #### <<<<< CORREGIR A PARENT_ID 0
@@ -42,11 +42,11 @@ def write_parents_partidas(df_partidas, df_títulos):
         previous_original_location = df_partidas.iloc[partida[0] - 1, 2]
         if partida[0] == 0:
             parent_query = df_títulos[df_títulos.original_location == parent_original_location]
-            parent = parent_query.títulos_ID.iloc[0]
+            parent = parent_query.ID.iloc[0]
             df_partidas.iloc[partida[0], 4] = parent
         elif not previous_original_location == parent_original_location:
             parent_query = df_títulos[df_títulos.original_location == parent_original_location]
-            parent = parent_query.títulos_ID.iloc[0]
+            parent = parent_query.ID.iloc[0]
             df_partidas.iloc[partida[0], 4] = parent
         else:
             df_partidas.iloc[partida[0], 4] = parent
@@ -55,7 +55,7 @@ def write_parents_partidas(df_partidas, df_títulos):
 
 
 def data_extractor(ws):
-    títulos = [[0, 'PLACEHOLDER', 0, 0, None]]
+    títulos = [[0, 'PRESPUESTO_TOTAL', 0, 0, None]]
     partidas = []
     títulos_ID = 0
     partidas_ID = 0
@@ -93,13 +93,13 @@ def update_db(db_path, df_títulos, df_partidas):
 
             # Create Títulos table
             títulos_schema = """
-                CREATE TABLE Títulos (
-                    "títulos_ID" INTEGER PRIMARY KEY,
+                CREATE TABLE "Títulos" (
+                    "ID" INTEGER PRIMARY KEY,
                     "name" TEXT,
                     "original_location" INTEGER,
                     "depth" INTEGER,
                     "parent" INTEGER,
-                    FOREIGN KEY ("parent") REFERENCES "Títulos" ("títulos_ID")
+                    FOREIGN KEY ("parent") REFERENCES "Títulos" ("ID")
                 );
             """
             cursor.execute(títulos_schema)
@@ -108,12 +108,12 @@ def update_db(db_path, df_títulos, df_partidas):
             # Create Partidas table
             partidas_schema = """
                 CREATE TABLE "Partidas" (
-	                "partidas_ID" INTEGER PRIMARY KEY,
+	                "ID" INTEGER PRIMARY KEY,
 	                "name" TEXT,
 	                "original_location" INTEGER,
 	                "depth" INTEGER,
 	                "parent" INTEGER,
-	                FOREIGN KEY ("parent") REFERENCES "Títulos" ("títulos_ID")
+	                FOREIGN KEY ("parent") REFERENCES "Títulos" ("ID")
                 );
             """
             cursor.execute(partidas_schema)
@@ -140,11 +140,11 @@ def main():
 
     df_títulos = pd.DataFrame(
         títulos,
-        columns=['títulos_ID', 'name', 'original_location', 'depth', 'parent']
+        columns=['ID', 'name', 'original_location', 'depth', 'parent']
     )
     df_partidas = pd.DataFrame(
         partidas,
-        columns=['partidas_ID', 'name', 'original_location', 'depth', 'parent']
+        columns=['ID', 'name', 'original_location', 'depth', 'parent']
     )
     df_títulos = write_parents_títulos(df_títulos)
     df_partidas = write_parents_partidas(df_partidas, df_títulos)
