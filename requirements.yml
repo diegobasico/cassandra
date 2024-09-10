@@ -1,0 +1,8 @@
+name: cassandra
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - tabulate
+  - openpyxl
