@@ -1,5 +1,5 @@
 import sys
-from PySide6.QtCore import QSize
+from PySide6.QtCore import QSize 
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLineEdit
 
 class MainWindow(QMainWindow):

@@ -6,3 +6,4 @@ dependencies:
   - pandas
   - tabulate
   - openpyxl
+  - pyside6
