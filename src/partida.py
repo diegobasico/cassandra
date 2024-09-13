@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 @dataclass(eq=True, order=True)
 class Partida:
 
-    #rubro, unidad y moneda se ingresan por código. Ej: (test, carpeta, m2, 21.12, 13.31)
+    # rubro, unidad y moneda se ingresan por código. Ej: (test, carpeta, m2, 21.12, 13.31)
     database: str
     nombre: str
     unidad_code: str
@@ -34,7 +34,8 @@ class Partida:
                 INSERT INTO Partidas("Nombre", "Unidad", "Metrado", "Rendimiento")
                 VALUES (?,?,?,?)
             """
-            cursor.execute(sql, (self.nombre, self.unidad_ID, self.metrado, self.rendimiento))
+            cursor.execute(sql, (self.nombre, self.unidad_ID,
+                           self.metrado, self.rendimiento))
             conn.commit()
         except sqlite3.Error as e:
             if "UNIQUE constraint failed" in str(e):

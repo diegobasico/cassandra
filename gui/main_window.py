@@ -1,6 +1,7 @@
 import sys
-from PySide6.QtCore import QSize 
+from PySide6.QtCore import QSize
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLineEdit
+
 
 class MainWindow(QMainWindow):
     def __init__(self, app):
@@ -19,7 +20,6 @@ class MainWindow(QMainWindow):
 
         # Layout
         layout = QVBoxLayout(central_widget)
-
 
         # Tool Bar
         tool_bar = self.addToolBar("&Toolbar")
@@ -75,6 +75,7 @@ class MainWindow(QMainWindow):
     def delete_record(self):
         # Implement your delete logic here
         print("Deleting record")
+
 
 if __name__ == "__main__":
     # print(QStyleFactory.keys())

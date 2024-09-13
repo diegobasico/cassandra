@@ -22,9 +22,11 @@ class Insumo:
         db = cs.Database(self.database)
         self.dbpath = db.path
         self.dbexists = db.exists
-        self.unidad_ID = db.xlookup('Unidades',self.unidad_code,'Code', 'ID')
-        self.rubro_ID = db.xlookup('Rubros', self.rubro_code.upper(), 'Code', 'ID')
-        self.moneda_ID = db.xlookup('Monedas', self.moneda_code.upper(), 'Code', 'ID')
+        self.unidad_ID = db.xlookup('Unidades', self.unidad_code, 'Code', 'ID')
+        self.rubro_ID = db.xlookup(
+            'Rubros', self.rubro_code.upper(), 'Code', 'ID')
+        self.moneda_ID = db.xlookup(
+            'Monedas', self.moneda_code.upper(), 'Code', 'ID')
 
     def add(self):
 
@@ -39,7 +41,8 @@ class Insumo:
                 INSERT INTO Insumos("Nombre", "Rubro", "Unidad", "Precio", "Moneda")
                 VALUES (?,?,?,?,?)
             """
-            cursor.execute(sql, (self.nombre, self.rubro_ID, self.unidad_ID, self.precio, self.moneda_ID))
+            cursor.execute(sql, (self.nombre, self.rubro_ID,
+                           self.unidad_ID, self.precio, self.moneda_ID))
             conn.commit()
         except sqlite3.Error as e:
             if "UNIQUE constraint failed" in str(e):

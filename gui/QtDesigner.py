@@ -9,6 +9,7 @@ qtdesigner_path = {
 }
 system = platform.system()
 
+
 def main():
     if system == 'Windows':
         os.startfile(qtdesigner_path['Windows'])
@@ -16,6 +17,7 @@ def main():
         subprocess.run([qtdesigner_path['Linux']])
     else:
         print(f"Operating system '{system}' is not supported.")
+
 
 if __name__ == '__main__':
     main()

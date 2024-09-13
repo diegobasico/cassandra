@@ -24,17 +24,22 @@ def timer(func):
 class SQLiteError(Exception):
     pass
 
+
 class Unidad(Unidad):
     pass
+
 
 class Insumo(Insumo):
     pass
 
+
 class Partida(Partida):
     pass
 
+
 class APU(APU):
     pass
+
 
 @dataclass(eq=True, order=True)
 class Database:
@@ -45,17 +50,20 @@ class Database:
     df: pd.DataFrame = field(init=False)
 
     def __post_init__(self):
-        self.path = str(Path().resolve().parent.joinpath('db', self.name + '.db'))
+        self.path = str(Path().resolve().parent.joinpath(
+            'db', self.name + '.db'))
         self.exists = Path(self.path).is_file()
 
     def check(self):
         if not self.exists:
             values = {"y": True, "n": False}
-            create = values[input(f'La base de datos "{self.name}" no existe. ¿Crear? [y/n]: ').lower()]
+            create = values[input(f'La base de datos "{
+                                  self.name}" no existe. ¿Crear? [y/n]: ').lower()]
             if create:
                 self.create()
             else:
-                raise SQLiteError(f'La base de datos "{self.name}" no fue creada.')
+                raise SQLiteError(f'La base de datos "{
+                                  self.name}" no fue creada.')
 
     def create(self):
         try:
@@ -210,11 +218,15 @@ class Database:
             cursor.execute(sql)
             results = cursor.fetchall()
             Partida = [result[0] for result in results]
-            Rubro = map(lambda x: self.xlookup('Rubros', x, 'ID', 'Code'), [self.xlookup('Insumos', result[1], 'ID', 'Rubro') for result in results])
-            Insumo = [self.xlookup('Insumos', result[1], 'ID', 'Nombre') for result in results]
-            Unidad = map(lambda x: self.xlookup('Unidades', x, 'ID', 'Code'), [self.xlookup('Insumos', result[1], 'ID', 'Unidad') for result in results])
+            Rubro = map(lambda x: self.xlookup('Rubros', x, 'ID', 'Code'), [
+                        self.xlookup('Insumos', result[1], 'ID', 'Rubro') for result in results])
+            Insumo = [self.xlookup('Insumos', result[1], 'ID', 'Nombre')
+                      for result in results]
+            Unidad = map(lambda x: self.xlookup('Unidades', x, 'ID', 'Code'), [
+                         self.xlookup('Insumos', result[1], 'ID', 'Unidad') for result in results])
             Cantidad = [result[2] for result in results]
-            Precio = [self.xlookup('Insumos', result[1], 'ID', 'Precio') for result in results]
+            Precio = [self.xlookup('Insumos', result[1], 'ID', 'Precio')
+                      for result in results]
         except sqlite3.Error as e:
             raise SQLiteError(e)
         finally:

@@ -37,12 +37,14 @@ def insert_test_values(database_name):
                ('Gigantografía', 'ma', 'und', 345.60, 'pen'),
                ('Excavadora', 'eq', 'hm', 190, 'pen')]
     for insumo in tqdm(insumos, desc='Insumos'):
-        cs.Insumo(db.name, insumo[0], insumo[1], insumo[2], insumo[3], insumo[4]).add()
+        cs.Insumo(db.name, insumo[0], insumo[1],
+                  insumo[2], insumo[3], insumo[4]).add()
 
     partidas = [('Cartel de Identificación de la Obra', 'und', 1, 2),
                 ('Corte de Terreno Natural', 'm3', 7567.42, 350)]
     for partida in tqdm(partidas, desc='Partidas'):
-        cs.Partida(db.name, partida[0], partida[1], partida[2], partida[3]).add()
+        cs.Partida(db.name, partida[0], partida[1],
+                   partida[2], partida[3]).add()
     apus = [(1, 2, 1),
             (1, 3, 1),
             (1, 4, 1),
