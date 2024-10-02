@@ -7,3 +7,4 @@ dependencies:
   - tabulate
   - openpyxl
   - pyside6
+  - tqdm

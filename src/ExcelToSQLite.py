@@ -1,7 +1,9 @@
-import os
-import sqlite3
 import openpyxl
 import pandas as pd
+
+import os
+import sqlite3
+from tkinter.filedialog import askopenfilename
 from pathlib import Path
 from dataclasses import dataclass, field
 
@@ -12,7 +14,7 @@ OpenPyXL will not update formulas in rows below any deleted rows.
 So, deleting blank rows is a bad idea in OpenPyXL as any
 pre-existing formulas will now refer to the wrong rows.
 
-The OpenPyXL method cell(a, b).value uses index 1,
+The OpenPyXL method 'cell(a, b).value' uses index 1,
 as in (1, 1) refers to cell "A1".
 """
 
@@ -20,15 +22,15 @@ as in (1, 1) refers to cell "A1".
 @dataclass
 class Presupuesto:
 
-    name: str
-    file: str = field(init=False)
-    processed: str = field(init=False)
-    sqlite: str = field(init=False)
+    path: str
+    stem: str = field(init=False)
+    processed: Path = field(init=False)
+    sqlite: Path = field(init=False)
 
     def __post_init__(self):
-        self.file = self.name + '.xlsx'
-        self.processed = self.name + '_processed.xlsx'
-        self.sqlite = Path(self.name).stem + '.db'
+        self.stem = Path(self.path).stem
+        self.processed = Path(self.path).with_name(self.stem + '_processed.xlsx')
+        self.sqlite = Path(self.path).with_name(self.stem + '.db')
         self.cleaner()
         self.extractor()
 
@@ -56,7 +58,7 @@ class Presupuesto:
 
     def cleaner(self):
 
-        wb = openpyxl.load_workbook(self.file)
+        wb = openpyxl.load_workbook(self.path)
         ws = wb.active
 
         if not ws['A'][0].value:
@@ -210,5 +212,5 @@ class Presupuesto:
 
 
 if __name__ == '__main__':
-    excel_file = input('Excel file: ')
+    excel_file = askopenfilename()
     ppto = Presupuesto(excel_file)
