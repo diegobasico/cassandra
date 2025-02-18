@@ -21,7 +21,7 @@ function App() {
 
   return (
     <div>
-      <h1>React + FastAPI + Polars + Handsontable</h1>
+      <h1>Cassandra</h1>
       <HotTable
         data={tableData}
         colHeaders={true}
