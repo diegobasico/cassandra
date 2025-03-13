@@ -7,10 +7,11 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
+frontend/node_modules
 dist
 dist-ssr
 *.local
+*__pycache__*
 
 # Editor directories and files
 .vscode/*
@@ -22,6 +23,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Python modules
-*__pycache__*
