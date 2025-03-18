@@ -3,7 +3,7 @@ import logging
 
 import polars as pl
 from sqlalchemy import MetaData
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
 ### set global variables ####
@@ -16,7 +16,7 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S"
 )
 
-db_path = "backend/data/database.db"
+db_path = "data/database.db"
 engine = create_engine(f"sqlite:///{db_path}", echo=True)
 metadata = MetaData()
 # metadata.reflect(bind=engine)

@@ -13,7 +13,8 @@ dist-ssr
 *.local
 *__pycache__*
 .venv
-backend/data/
+backend/data/*
+!backend/data/.gitkeep
 
 # Editor directories and files
 .vscode/*
