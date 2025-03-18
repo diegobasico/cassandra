@@ -1,6 +1,6 @@
 function Main() {
   return (
-    <div>
+    <div className="">
       <p>Hello there!</p>
       <p>General Kenobi</p>
     </div>
