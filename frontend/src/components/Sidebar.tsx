@@ -9,10 +9,10 @@ function Sidebar() {
       <li>
         <button
           onClick={toggleSidebar}
-          className="group flex h-12 items-center p-2 text-gray-900 group-hover:text-gray-900 dark:text-gray-400"
+          className="group flex items-center gap-2 p-2 text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
           <svg
-            className="w-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
+            className="h-6 w-6"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -20,7 +20,7 @@ function Sidebar() {
           >
             {svgPath}
           </svg>
-          <span className="ms-3">{text}</span>
+          <span className="ms-2">{text}</span>
         </button>
       </li>
     );
