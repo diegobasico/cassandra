@@ -9,10 +9,10 @@ function Sidebar() {
       <li>
         <button
           onClick={toggleSidebar}
-          className="group flex items-center gap-2 p-2 text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+          className="group flex pt-2 pb-2 pl-3.5 text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
           <svg
-            className="h-6 w-6"
+            className="h-6 w-6 items-center"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
@@ -28,8 +28,8 @@ function Sidebar() {
 
   function ExpandedSidebar() {
     return (
-      <div className="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full overflow-y-auto transition-transform sm:translate-x-0">
-        <ul className="space-y-2 font-medium">
+      <div className="fixed top-0 left-0 z-40 h-screen w-48 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
+        <ul className="mt-4 space-y-2 font-medium">
           <SidebarItem
             text=""
             svgPath={
@@ -131,8 +131,8 @@ function Sidebar() {
 
   function CollapsedSidebar() {
     return (
-      <div className="fixed top-0 left-0 z-40 h-screen w-20 -translate-x-full overflow-y-auto transition-transform sm:translate-x-0">
-        <ul className="space-y-2 font-medium">
+      <div className="fixed top-0 left-0 z-40 h-screen w-14 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
+        <ul className="mt-4 space-y-2 font-medium">
           <SidebarItem
             text=""
             svgPath={
@@ -238,11 +238,7 @@ function Sidebar() {
 
   console.log(sidebarStatus);
 
-  return (
-    <div className="fixed top-0 left-0 z-40 h-screen w-64 -translate-x-full overflow-y-auto transition-transform sm:translate-x-0">
-      {sidebar}
-    </div>
-  );
+  return <>{sidebar}</>;
 }
 
 export default Sidebar;
