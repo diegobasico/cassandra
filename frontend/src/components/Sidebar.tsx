@@ -4,6 +4,10 @@ function Sidebar() {
   const [sidebarStatus, setSidebarStatus] = useState(false);
   const sidebar = sidebarStatus ? <ExpandedSidebar /> : <CollapsedSidebar />;
 
+  function toggleSidebar() {
+    return setSidebarStatus((prev) => !prev);
+  }
+
   function SidebarItem({ text, svgPath }: { text: string | null; svgPath: ReactNode }) {
     return (
       <li>
@@ -28,7 +32,7 @@ function Sidebar() {
 
   function ExpandedSidebar() {
     return (
-      <div className="fixed top-0 left-0 z-40 h-screen w-48 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
+      <div className="top-0 left-0 h-screen w-48 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
         <ul className="mt-4 space-y-2 font-medium">
           <SidebarItem
             text=""
@@ -131,7 +135,7 @@ function Sidebar() {
 
   function CollapsedSidebar() {
     return (
-      <div className="fixed top-0 left-0 z-40 h-screen w-14 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
+      <div className="top-0 left-0 h-screen w-14 -translate-x-full overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0">
         <ul className="mt-4 space-y-2 font-medium">
           <SidebarItem
             text=""
@@ -231,12 +235,6 @@ function Sidebar() {
       </div>
     );
   }
-
-  function toggleSidebar() {
-    return setSidebarStatus((prev) => !prev);
-  }
-
-  console.log(sidebarStatus);
 
   return <>{sidebar}</>;
 }
