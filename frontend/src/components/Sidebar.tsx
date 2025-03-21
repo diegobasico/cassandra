@@ -1,13 +1,21 @@
 import React, { ReactNode, useState } from "react";
 
 interface SidebarProps {
-  activeComponent: React.Dispatch<React.SetStateAction<string>>;
+  activateComponent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function Sidebar({ activeComponent }: SidebarProps) {
+function Sidebar({ activateComponent }: SidebarProps) {
+  interface SidebarItemProps {
+    component: () => void;
+    text?: string;
+    svg: ReactNode;
+    header?: boolean;
+  }
+
   const [sidebarStatus, setSidebarStatus] = useState(false);
+
   const sidebarIcons = {
-    hamburguer: (
+    burguer: (
       <svg
         className="h-6 w-6"
         aria-hidden="true"
@@ -88,7 +96,7 @@ function Sidebar({ activeComponent }: SidebarProps) {
         <path d="M14 4H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2ZM2 16v-6h12v6H2Z" />
       </svg>
     ),
-    settings: (
+    cog: (
       <svg
         className="h-6 w-6"
         aria-hidden="true"
@@ -101,73 +109,78 @@ function Sidebar({ activeComponent }: SidebarProps) {
     ),
   };
 
-  function SidebarItem({
-    endpoint,
-    text,
-    svgPath,
-    header,
-  }: {
-    endpoint: () => void;
-    text?: string | null;
-    svgPath: ReactNode;
-    header?: boolean;
-  }) {
-    return (
-      <li>
-        <button
-          onClick={endpoint}
-          className={`group flex flex-row ${header ? "pt-5 pb-9" : "pt-2 pb-2"} text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`}
-        >
-          {svgPath}
-          <span className="ms-2">{text}</span>
-        </button>
-      </li>
-    );
-  }
+  const sidebarItemsMain: SidebarItemProps[] = [
+    {
+      component: toggleSidebar,
+      svg: sidebarIcons.burguer,
+      header: true,
+    },
+    {
+      component: () => activateComponent("Datos"),
+      text: "Datos",
+      svg: sidebarIcons.book,
+    },
+    {
+      component: () => activateComponent("Ppto"),
+      text: "Presupuesto",
+      svg: sidebarIcons.dashboard,
+    },
+    {
+      component: () => activateComponent("Apu"),
+      text: "Precios Unitarios",
+      svg: sidebarIcons.apps,
+    },
+    {
+      component: () => activateComponent("Insumos"),
+      text: "Insumos",
+      svg: sidebarIcons.notes,
+    },
+    {
+      component: () => activateComponent("Gastos"),
+      text: "Gastos Generales",
+      svg: sidebarIcons.windows,
+    },
+  ];
+
+  const sidebarItemsFooter: SidebarItemProps[] = [
+    {
+      component: () => activateComponent("Config"),
+      text: "Configuración",
+      svg: sidebarIcons.cog,
+    },
+  ];
 
   function toggleSidebar() {
     setSidebarStatus((prev) => !prev);
+  }
+
+  function SidebarComponent({ data, status }: { data: SidebarItemProps[]; status: boolean }) {
+    return (
+      <>
+        {data.map((item, index) => (
+          <li key={index}>
+            <button
+              onClick={item.component}
+              className={`group flex flex-row ${item.header ? "pt-5 pb-9" : "pt-2 pb-2"} text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`}
+            >
+              {item.svg}
+              <span className="ms-2">{status ? item.text : null}</span>
+            </button>
+          </li>
+        ))}
+      </>
+    );
   }
 
   return (
     <div
       className={`top-0 left-0 flex h-screen flex-col ${sidebarStatus ? "w-48" : "w-12"} -translate-x-full justify-between overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0`}
     >
-      <ul className="justify-left mt-4 grid space-y-2 p-3 font-medium">
-        <SidebarItem endpoint={toggleSidebar} svgPath={sidebarIcons.hamburguer} header={true} />
-        <SidebarItem
-          endpoint={() => activeComponent("Datos")}
-          text={sidebarStatus ? "Datos" : null}
-          svgPath={sidebarIcons.book}
-        />
-        <SidebarItem
-          endpoint={() => activeComponent("Ppto")}
-          text={sidebarStatus ? "Presupuesto" : null}
-          svgPath={sidebarIcons.dashboard}
-        />
-        <SidebarItem
-          endpoint={() => activeComponent("Apu")}
-          text={sidebarStatus ? "Precios Unitarios" : null}
-          svgPath={sidebarIcons.apps}
-        />
-        <SidebarItem
-          endpoint={() => activeComponent("Insumos")}
-          text={sidebarStatus ? "Insumos" : null}
-          svgPath={sidebarIcons.notes}
-        />
-        <SidebarItem
-          endpoint={() => activeComponent("Gastos")}
-          text={sidebarStatus ? "Gastos Generales" : null}
-          svgPath={sidebarIcons.windows}
-        />
+      <ul className="justify-left grid space-y-2 p-3 font-medium">
+        <SidebarComponent data={sidebarItemsMain} status={sidebarStatus} />
       </ul>
       <ul className="justify-left mt-4 grid space-y-2 p-3 pt-6 pb-5 font-medium">
-        {/* <SidebarItem text={sidebarStatus ? "Upgrade to Pro" : ""} svgPath={sidebarIcons.ember} /> */}
-        <SidebarItem
-          endpoint={() => activeComponent("Config")}
-          text={sidebarStatus ? "Configuración" : null}
-          svgPath={sidebarIcons.settings}
-        />
+        <SidebarComponent data={sidebarItemsFooter} status={sidebarStatus} />
       </ul>
     </div>
   );
