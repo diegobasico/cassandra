@@ -1,9 +1,13 @@
 import { ReactNode } from "react";
+import { getCurrentWindow } from "@tauri-apps/api/window";
 
 function TitleBar() {
   interface titleBarButtonProps {
     svg: ReactNode;
+    action: () => void;
   }
+
+  const appWindow = getCurrentWindow();
 
   const rightTitlebarButtons: titleBarButtonProps[] = [
     {
@@ -17,6 +21,7 @@ function TitleBar() {
           <path d="M20 14H4v-4h16" />
         </svg>
       ),
+      action: () => appWindow.minimize(),
     },
     {
       svg: (
@@ -29,6 +34,7 @@ function TitleBar() {
           <path d="M4 4h16v16H4zm2 4v10h12V8z" />
         </svg>
       ),
+      action: () => appWindow.toggleMaximize(),
     },
     {
       svg: (
@@ -41,6 +47,7 @@ function TitleBar() {
           <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" />
         </svg>
       ),
+      action: () => appWindow.close(),
     },
   ];
 
@@ -48,7 +55,7 @@ function TitleBar() {
     svg: (
       <svg
         data-tauri-drag-region
-        className="h-5 w-5"
+        className="ml-2 h-5 w-5"
         fill="currentColor"
         viewBox="0 0 20 20"
         version="1.1"
@@ -63,16 +70,19 @@ function TitleBar() {
     ),
   };
 
-  function TitlebarButton({ svg }: { svg: titleBarButtonProps[] }) {
+  function TitlebarButton({ icons }: { icons: titleBarButtonProps[] }) {
     return (
       <>
-        {svg.map((item, index) => (
+        {icons.map((item, index) => (
           <div
             className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center"
-            id={`titlebar-button-${index}`}
             key={index}
           >
-            <button className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+            <button
+              id={`titlebar-button-${index}`}
+              onClick={item.action}
+              className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+            >
               {item.svg}
             </button>
           </div>
@@ -101,7 +111,7 @@ function TitleBar() {
         &lt; Cassandra &gt;
       </div>
       <div id="right-space">
-        <TitlebarButton svg={rightTitlebarButtons} />
+        <TitlebarButton icons={rightTitlebarButtons} />
       </div>
     </div>
   );
