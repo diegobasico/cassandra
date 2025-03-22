@@ -17,7 +17,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
   const sidebarIcons = {
     burguer: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -28,7 +28,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     dashboard: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -40,7 +40,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     apps: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -51,7 +51,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     notes: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -64,7 +64,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     ember: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -75,7 +75,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     book: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -86,7 +86,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     windows: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -98,7 +98,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
     ),
     cog: (
       <svg
-        className="h-6 w-6"
+        className="h-6 w-8"
         aria-hidden="true"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
@@ -154,7 +154,13 @@ function Sidebar({ activateComponent }: SidebarProps) {
     setSidebarStatus((prev) => !prev);
   }
 
-  function SidebarComponent({ data, status }: { data: SidebarItemProps[]; status: boolean }) {
+  function SidebarComponent({
+    data,
+    status,
+  }: {
+    data: SidebarItemProps[];
+    status: boolean;
+  }) {
     return (
       <>
         {data.map((item, index) => (
@@ -164,7 +170,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
               className={`group flex flex-row ${item.header ? "pt-5 pb-9" : "pt-2 pb-2"} text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`}
             >
               {item.svg}
-              <span className="ms-2">{status ? item.text : null}</span>
+              <span className="ms-2 text-left">{status ? item.text : null}</span>
             </button>
           </li>
         ))}
@@ -174,7 +180,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
 
   return (
     <div
-      className={`top-0 left-0 flex h-screen flex-col ${sidebarStatus ? "w-48" : "w-12"} -translate-x-full justify-between overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0`}
+      className={`top-0 left-0 flex h-full flex-col border-r border-neutral-700 ${sidebarStatus ? "w-64" : "w-16"} -translate-x-full justify-between overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0`}
     >
       <ul className="justify-left grid space-y-2 p-3 font-medium">
         <SidebarComponent data={sidebarItemsMain} status={sidebarStatus} />

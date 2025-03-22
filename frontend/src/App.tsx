@@ -7,10 +7,10 @@ import Apu from "./components/Apu";
 import Insumos from "./components/Insumos";
 import Gastos from "./components/Gastos";
 import Config from "./components/Config";
+import TitleBar from "./components/TitleBar";
 
 function App() {
   const [activeComponent, setActiveComponent] = useState<string>("Main");
-
   const componentMap: { [key: string]: React.JSX.Element } = {
     Datos: <Datos />,
     Ppto: <Ppto />,
@@ -21,9 +21,14 @@ function App() {
   };
 
   return (
-    <div className="flex h-dvh bg-neutral-50 font-light text-gray-200 dark:bg-neutral-800">
-      <Sidebar activateComponent={setActiveComponent} />
-      {componentMap[activeComponent] || <Main />}
+    <div className="flex h-dvh flex-col bg-neutral-50 font-light text-gray-200 dark:bg-neutral-800">
+      <TitleBar />
+      <div className="flex h-full">
+        <Sidebar activateComponent={setActiveComponent} />
+        <div className="w-dvw overflow-y-auto">
+          {componentMap[activeComponent] || <Main />}
+        </div>
+      </div>
     </div>
   );
 }
