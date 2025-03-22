@@ -1,11 +1,14 @@
 import React, { ReactNode, useState } from "react";
 
-interface SidebarProps {
+function Sidebar({
+  component,
+  activateComponent,
+}: {
+  component: string;
   activateComponent: React.Dispatch<React.SetStateAction<string>>;
-}
-
-function Sidebar({ activateComponent }: SidebarProps) {
+}) {
   interface SidebarItemProps {
+    id: string;
     component: () => void;
     text?: string;
     svg: ReactNode;
@@ -111,31 +114,37 @@ function Sidebar({ activateComponent }: SidebarProps) {
 
   const sidebarItemsMain: SidebarItemProps[] = [
     {
+      id: "burguer",
       component: toggleSidebar,
       svg: sidebarIcons.burguer,
       header: true,
     },
     {
+      id: "Datos",
       component: () => activateComponent("Datos"),
       text: "Datos",
       svg: sidebarIcons.book,
     },
     {
+      id: "Ppto",
       component: () => activateComponent("Ppto"),
       text: "Presupuesto",
       svg: sidebarIcons.dashboard,
     },
     {
+      id: "Apu",
       component: () => activateComponent("Apu"),
       text: "Precios Unitarios",
       svg: sidebarIcons.apps,
     },
     {
+      id: "Insumos",
       component: () => activateComponent("Insumos"),
       text: "Insumos",
       svg: sidebarIcons.notes,
     },
     {
+      id: "Gastos",
       component: () => activateComponent("Gastos"),
       text: "Gastos Generales",
       svg: sidebarIcons.windows,
@@ -144,6 +153,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
 
   const sidebarItemsFooter: SidebarItemProps[] = [
     {
+      id: "Config",
       component: () => activateComponent("Config"),
       text: "Configuración",
       svg: sidebarIcons.cog,
@@ -167,7 +177,7 @@ function Sidebar({ activateComponent }: SidebarProps) {
           <li key={index}>
             <button
               onClick={item.component}
-              className={`group flex flex-row pt-2 ${item.header ? "pb-10" : "pb-4"} text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`}
+              className={`group flex flex-row ${item.id === component ? "border-l-2 pl-1.5" : "pl-2"} border-amber-200 ${item.header ? "mb-10" : "mt-1 mb-1 pt-2 pb-2"} text-gray-500 transition duration-75 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white`}
             >
               {item.svg}
               <span className="ms-2 text-left">{status ? item.text : null}</span>
@@ -182,10 +192,10 @@ function Sidebar({ activateComponent }: SidebarProps) {
     <div
       className={`top-0 left-0 flex h-full flex-col border-r border-neutral-700 ${sidebarStatus ? "w-64" : "w-14"} -translate-x-full justify-between overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0`}
     >
-      <ul className="justify-left grid p-2 font-medium">
+      <ul className="justify-left mt-4 grid font-medium">
         <SidebarComponent data={sidebarItemsMain} status={sidebarStatus} />
       </ul>
-      <ul className="justify-left mt-4 grid p-2 pt-6 pb-0 font-medium">
+      <ul className="justify-left mt-10 mb-4 grid font-medium">
         <SidebarComponent data={sidebarItemsFooter} status={sidebarStatus} />
       </ul>
     </div>

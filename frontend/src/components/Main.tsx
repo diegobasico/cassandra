@@ -9,7 +9,11 @@ function Main() {
     timeOfDay = "night";
   }
 
-  return <span className="p-4 text-3xl">Good {timeOfDay}</span>;
+  return (
+    <div className="p-4">
+      <span className="text-3xl">Good {timeOfDay}</span>
+    </div>
+  );
 }
 
 export default Main;

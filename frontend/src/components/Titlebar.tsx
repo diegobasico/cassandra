@@ -1,65 +1,16 @@
-import { ReactNode } from "react";
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { useEffect, useState } from "react";
 
 function TitleBar() {
-  interface titleBarButtonProps {
-    svg: ReactNode;
-    action: () => void;
-  }
-
   const appWindow = getCurrentWindow();
-
-  const rightTitlebarButtons: titleBarButtonProps[] = [
-    {
-      svg: (
-        <svg
-          className="h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path d="M20 14H4v-4h16" />
-        </svg>
-      ),
-      action: () => appWindow.minimize(),
-    },
-    {
-      svg: (
-        <svg
-          className="h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path d="M4 4h16v16H4zm2 4v10h12V8z" />
-        </svg>
-      ),
-      action: () => appWindow.toggleMaximize(),
-    },
-    {
-      svg: (
-        <svg
-          className="h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-        >
-          <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" />
-        </svg>
-      ),
-      action: () => appWindow.close(),
-    },
-  ];
-
-  const logo: { svg: ReactNode } = {
-    svg: (
+  const titlebarIcons = {
+    logo: (
       <svg
         data-tauri-drag-region
-        className="ml-2 h-5 w-5"
-        fill="currentColor"
-        viewBox="0 0 20 20"
-        version="1.1"
+        className="h-6 w-12"
+        viewBox="-2 -2 24.00 24.00"
         xmlns="http://www.w3.org/2000/svg"
+        fill="#fee685"
       >
         <path
           data-tauri-drag-region
@@ -68,25 +19,93 @@ function TitleBar() {
         ></path>
       </svg>
     ),
+    maximize: (
+      <svg
+        className="h-6 w-6"
+        fill="currentColor"
+        viewBox="0 0 36 36"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M27.89,9h-20a2,2,0,0,0-2,2V25a2,2,0,0,0,2,2h20a2,2,0,0,0,2-2V11A2,2,0,0,0,27.89,9Zm-20,16V11h20V25Z"></path>{" "}
+      </svg>
+    ),
+    restore: (
+      <svg
+        className="h-6 w-6"
+        fill="currentColor"
+        viewBox="0 0 36 36"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M28,8H14a2,2,0,0,0-2,2v2h2V10H28V20H26v2h2a2,2,0,0,0,2-2V10A2,2,0,0,0,28,8Z"></path>
+        <path d="M22,14H8a2,2,0,0,0-2,2V26a2,2,0,0,0,2,2H22a2,2,0,0,0,2-2V16A2,2,0,0,0,22,14ZM8,26V16H22V26Z"></path>
+      </svg>
+    ),
+    minimize: (
+      <svg
+        className="h-6 w-6"
+        fill="currentColor"
+        viewBox="0 0 36 36"
+        xmlns="http://www.w3.org/2000/svg"
+        data-darkreader-inline-fill=""
+      >
+        <path d="M27,27H9a1,1,0,0,1,0-2H27a1,1,0,0,1,0,2Z"></path>{" "}
+      </svg>
+    ),
+    close: (
+      <svg
+        className="h-6 w-6"
+        fill="currentColor"
+        viewBox="0 0 36 36"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M19.41,18l7.29-7.29a1,1,0,0,0-1.41-1.41L18,16.59,10.71,9.29a1,1,0,0,0-1.41,1.41L16.59,18,9.29,25.29a1,1,0,1,0,1.41,1.41L18,19.41l7.29,7.29a1,1,0,0,0,1.41-1.41Z"></path>{" "}
+      </svg>
+    ),
   };
+  const [windowSize, setWindowSize] = useState(false);
 
-  function TitlebarButton({ icons }: { icons: titleBarButtonProps[] }) {
+  useEffect(() => {
+    async function updateWindowSize() {
+      const size = await appWindow.isMaximized();
+      setWindowSize(size);
+    }
+
+    updateWindowSize();
+
+    const unlistenMaximize = appWindow.onResized(updateWindowSize);
+
+    return () => {
+      unlistenMaximize.then((unlisten) => unlisten());
+    };
+  }, []);
+
+  function LeftTitlebarButtons() {
     return (
       <>
-        {icons.map((item, index) => (
-          <div
-            className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center"
-            key={index}
-          >
-            <button
-              id={`titlebar-button-${index}`}
-              onClick={item.action}
-              className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-            >
-              {item.svg}
-            </button>
-          </div>
-        ))}
+        {/* miminize button */}
+        <button
+          onClick={() => appWindow.minimize()}
+          className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          {titlebarIcons.minimize}
+        </button>
+        {/* toggle maximize button */}
+        <button
+          onClick={async () => {
+            await appWindow.toggleMaximize();
+            setWindowSize(await appWindow.isMaximized());
+          }}
+          className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          {windowSize ? titlebarIcons.restore : titlebarIcons.maximize}
+        </button>
+        {/* close window button */}
+        <button
+          onClick={() => appWindow.close()}
+          className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
+        >
+          {titlebarIcons.close}
+        </button>
       </>
     );
   }
@@ -99,9 +118,9 @@ function TitleBar() {
       <div
         data-tauri-drag-region
         id="left-space"
-        className="inline-flex h-7.5 w-7.5 items-center justify-center text-amber-200"
+        className="inline-flex h-7.5 items-center justify-center"
       >
-        {logo.svg}
+        {titlebarIcons.logo}
       </div>
       <div
         data-tauri-drag-region
@@ -111,7 +130,7 @@ function TitleBar() {
         &lt; Cassandra &gt;
       </div>
       <div id="right-space">
-        <TitlebarButton icons={rightTitlebarButtons} />
+        <LeftTitlebarButtons />
       </div>
     </div>
   );

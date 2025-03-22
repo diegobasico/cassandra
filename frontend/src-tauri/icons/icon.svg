@@ -1,7 +1,13 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="800px" height="800px" viewBox="-2 -2 24.00 24.00" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" style="--darkreader-inline-fill: var(--darkreader-background-000000, #000000);" data-darkreader-inline-fill="" transform="rotate(0)">
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.04" style="--darkreader-inline-stroke: var(--darkreader-text-cccccc, #c8c3bc);" data-darkreader-inline-stroke=""/>
-<g id="SVGRepo_iconCarrier"> <title>3d_modelling [#819]</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Page-1" stroke-width="0.0002" fill="none" fill-rule="evenodd" style=""> <g id="Dribbble-Light-Preview" transform="translate(-100.000000, -4559.000000)" fill="#fee685" style="--darkreader-inline-fill: var(--darkreader-background-fee685, #5d4b01);" data-darkreader-inline-fill=""> <g id="icons" transform="translate(56.000000, 160.000000)"> <path d="M46.938,4411.948 L53,4403.804 L53,4415.5 L46.938,4411.948 Z M61.063,4411.948 L55,4415.5 L55,4403.804 L61.063,4411.948 Z M55.001,4400.454 L54,4399 L53,4400.454 L44,4412.545 L53,4417.818 L54,4418.357 L55.001,4417.818 L64,4412.545 L55.001,4400.454 Z" id="3d_modelling-[#819]"> </path> </g> </g> </g> </g>
-</svg>
+<svg
+    className="h-6 w-6"
+    viewBox="-2 -2 24.00 24.00"
+    xmlns="http://www.w3.org/2000/svg"
+    fill="#fee685"
+>
+    <path
+        transform="translate(-44.000000, -4400.000000)"
+        d="M46.938,4411.948 L53,4403.804 L53,4415.5 L46.938,4411.948 Z M61.063,4411.948 L55,4415.5 L55,4403.804 L61.063,4411.948 Z M55.001,4400.454 L54,4399 L53,4400.454 L44,4412.545 L53,4417.818 L54,4418.357 L55.001,4417.818 L64,4412.545 L55.001,4400.454 Z"
+    ></path>
+</svg>
