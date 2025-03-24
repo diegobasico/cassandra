@@ -62,44 +62,33 @@ function TitleBar() {
       </svg>
     ),
   };
-  const [windowSize, setWindowSize] = useState(false);
+  const [isMaximized, setIsMaximized] = useState(false);
 
   useEffect(() => {
-    async function updateWindowSize() {
-      const size = await appWindow.isMaximized();
-      setWindowSize(size);
+    async function checkMaximized() {
+      setIsMaximized(await appWindow.isMaximized());
     }
 
-    updateWindowSize();
+    checkMaximized();
 
-    const unlistenMaximize = appWindow.onResized(updateWindowSize);
-
-    return () => {
-      unlistenMaximize.then((unlisten) => unlisten());
-    };
+    window.addEventListener("resize", checkMaximized);
   }, []);
 
   function LeftTitlebarButtons() {
     return (
       <>
-        {/* miminize button */}
         <button
           onClick={() => appWindow.minimize()}
           className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
           {titlebarIcons.minimize}
         </button>
-        {/* toggle maximize button */}
         <button
-          onClick={async () => {
-            await appWindow.toggleMaximize();
-            setWindowSize(await appWindow.isMaximized());
-          }}
+          onClick={() => appWindow.toggleMaximize()}
           className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
-          {windowSize ? titlebarIcons.restore : titlebarIcons.maximize}
+          {isMaximized ? titlebarIcons.restore : titlebarIcons.maximize}
         </button>
-        {/* close window button */}
         <button
           onClick={() => appWindow.close()}
           className="mr-2 ml-2 inline-flex h-7.5 w-7.5 items-center justify-center text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
@@ -113,7 +102,7 @@ function TitleBar() {
   return (
     <div
       data-tauri-drag-region
-      className="flex h-7.5 justify-between border-b border-neutral-700 bg-neutral-900"
+      className="fixed top-0 right-0 left-0 flex h-7.5 justify-between border-b border-neutral-700 bg-neutral-900"
     >
       <div
         data-tauri-drag-region

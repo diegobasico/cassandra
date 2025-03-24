@@ -1,4 +1,5 @@
 import polars as pl
+from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -27,3 +28,14 @@ def home():
 @app.get("/data")
 def get_data():
     return df.to_dicts()
+
+
+class Item(BaseModel):
+    name: str
+    price: float
+    quantity: int
+
+
+@app.post("/response")
+async def get_response(item: Item):
+    print(item)

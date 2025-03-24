@@ -190,12 +190,12 @@ function Sidebar({
 
   return (
     <div
-      className={`top-0 left-0 flex h-full flex-col border-r border-neutral-700 ${sidebarStatus ? "w-64" : "w-14"} -translate-x-full justify-between overflow-y-auto bg-neutral-900 transition-transform sm:translate-x-0`}
+      className={`flex flex-col border-r border-neutral-700 ${sidebarStatus ? "w-52" : "w-14"} justify-between bg-neutral-900 transition-transform`}
     >
       <ul className="justify-left mt-4 grid font-medium">
         <SidebarComponent data={sidebarItemsMain} status={sidebarStatus} />
       </ul>
-      <ul className="justify-left mt-10 mb-4 grid font-medium">
+      <ul className="justify-left mt-10 mb-2 grid font-medium">
         <SidebarComponent data={sidebarItemsFooter} status={sidebarStatus} />
       </ul>
     </div>

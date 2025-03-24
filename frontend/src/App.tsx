@@ -10,7 +10,7 @@ import Config from "./components/Config";
 import TitleBar from "./components/Titlebar";
 import { getCurrentWindow, PhysicalSize } from "@tauri-apps/api/window";
 
-await getCurrentWindow().setMinSize(new PhysicalSize(800, 600));
+await getCurrentWindow().setMinSize(new PhysicalSize(960, 720));
 
 function App() {
   const [activeComponent, setActiveComponent] = useState("Main");
@@ -26,11 +26,9 @@ function App() {
   return (
     <div className="flex h-dvh flex-col bg-neutral-50 font-light text-gray-200 dark:bg-neutral-800">
       <TitleBar />
-      <div className="flex h-full">
+      <div className="mt-7.5 flex flex-grow overflow-hidden">
         <Sidebar component={activeComponent} activateComponent={setActiveComponent} />
-        <div className="w-dvw overflow-y-auto">
-          {componentMap[activeComponent] || <Main />}
-        </div>
+        {componentMap[activeComponent] || <Main />}
       </div>
     </div>
   );
