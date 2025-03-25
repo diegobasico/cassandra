@@ -9,7 +9,7 @@ function Datos() {
   const [formState, setFormState] = useAtom(formAtom);
 
   return (
-    <div className="p-4">
+    <div className="flex flex-col p-4">
       <span className="text-3xl"> Datos Generales</span>
       <input
         type="text"

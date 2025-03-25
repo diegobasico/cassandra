@@ -1,10 +1,13 @@
 import { registerAllModules } from "handsontable/registry";
-import { HotTable } from "@handsontable/react-wrapper";
+import { HotTable, HotTableRef } from "@handsontable/react-wrapper";
+import Handsontable from "handsontable";
+import { useRef } from "react";
 import { atom, useAtom } from "jotai";
+import axios from "axios";
 
 registerAllModules();
 
-const hotAtom = atom<any[][]>([
+const hotAtom = atom([
   ["1", "Obras Provisionales", "glb", 1, 2, 2],
   ["2", "Arquitectura", "m²", 1, 2, 2],
   ["3", "Estructuras", "m³", 1, 2, 2],
@@ -14,15 +17,52 @@ const hotAtom = atom<any[][]>([
 
 function Ppto() {
   const [tableData, setTableData] = useAtom(hotAtom);
+  const hotRef = useRef<HotTableRef>(null);
+  const testData = { text: "this is a test string" };
+
+  async function sendData(data: { text: string }) {
+    try {
+      await axios.post("http://127.0.0.1:8000/test", data, {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  async function sendTable(data: any[]) {
+    try {
+      await axios.post(
+        "http://127.0.0.1:8000/ppto",
+        { table: data },
+        {
+          headers: { "Content-Type": "application/json" },
+        },
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
 
   return (
     <div className="flex grow flex-col overflow-clip">
       <span className="p-4 text-3xl">Presupuesto</span>
       <div className="ht-theme-main-dark-auto flex-grow overflow-y-auto p-0">
+        <button onClick={() => sendData(testData)}>Click me to test!</button>
+
         <HotTable
-          afterChange={(changes, source) => {
-            if (changes && source !== "loadData") {
-              setTableData([...tableData]);
+          ref={hotRef}
+          afterChange={function (
+            changes: Handsontable.CellChange[] | null,
+            source: Handsontable.ChangeSource,
+          ) {
+            const hot = hotRef.current?.hotInstance;
+            if (changes && source !== "loadData" && hot) {
+              const newData = hot.getData();
+              console.log(newData);
+              setTableData(newData);
+              sendData({ text: "this is another string" });
+              sendTable(newData);
             }
           }}
           data={tableData}

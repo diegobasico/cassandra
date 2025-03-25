@@ -72,6 +72,10 @@ function TitleBar() {
     checkMaximized();
 
     window.addEventListener("resize", checkMaximized);
+
+    return () => {
+      window.removeEventListener("resize", checkMaximized);
+    };
   }, []);
 
   function LeftTitlebarButtons() {
