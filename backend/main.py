@@ -1,7 +1,7 @@
 import polars as pl
+import numpy as np
 
-from typing import Any, List
-
+from typing import List
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -18,7 +18,7 @@ class Test(BaseModel):
 
 
 class Hot(BaseModel):
-    table: List
+    table: List[List]
 
 
 app = FastAPI()
@@ -31,21 +31,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-df = pl.DataFrame({
-    "ID": [1, 2, 3],
-    "Name": ["Alice", "Bob", "Charlie"],
-    "Age": [25, 30, 22],
-})
-
 
 @app.get("/")
 def home():
     return {"message": "Hello there, General Kenobi."}
-
-
-@app.get("/data")
-def get_data():
-    return df.to_dicts()
 
 
 @app.post("/response")
@@ -60,4 +49,19 @@ async def get_test(data: Test):
 
 @app.post("/ppto")
 async def get_ppto(ppto: Hot):
-    print(ppto)
+    matrix = np.matrix(ppto.table).transpose().tolist()
+    df = pl.DataFrame(
+        matrix,
+        schema={
+            "Item": pl.String,
+            "Descripción": pl.String,
+            "Unidad": pl.String,
+            "Metrado": pl.Float32,
+            "Precio": pl.Float32,
+            "Parcial": pl.String,
+        },
+    )
+    df = df.with_columns(
+        (pl.col("Metrado") * pl.col("Precio")).alias("Parcial"),
+    )
+    print(df)

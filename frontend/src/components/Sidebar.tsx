@@ -1,11 +1,15 @@
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 
 function Sidebar({
   component,
   activateComponent,
+  sidebarStatus,
+  setSidebarStatus,
 }: {
   component: string;
   activateComponent: React.Dispatch<React.SetStateAction<string>>;
+  sidebarStatus: boolean;
+  setSidebarStatus: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   interface SidebarItemProps {
     id: string;
@@ -14,8 +18,6 @@ function Sidebar({
     svg: ReactNode;
     header?: boolean;
   }
-
-  const [sidebarStatus, setSidebarStatus] = useState(false);
 
   const sidebarIcons = {
     burguer: (
@@ -190,7 +192,7 @@ function Sidebar({
 
   return (
     <div
-      className={`flex flex-col border-r border-neutral-700 ${sidebarStatus ? "w-52" : "w-14"} justify-between bg-neutral-900 transition-transform`}
+      className={`flex h-full flex-col border-r border-neutral-700 justify-between bg-neutral-900 transition-transform`}
     >
       <ul className="justify-left mt-4 grid font-medium">
         <SidebarComponent data={sidebarItemsMain} status={sidebarStatus} />

@@ -1,9 +1,12 @@
+import { useRef } from "react";
+
+import { atom, useAtom } from "jotai";
+import axios from "axios";
+
 import { registerAllModules } from "handsontable/registry";
 import { HotTable, HotTableRef } from "@handsontable/react-wrapper";
 import Handsontable from "handsontable";
-import { useRef } from "react";
-import { atom, useAtom } from "jotai";
-import axios from "axios";
+import { HyperFormula } from "hyperformula";
 
 registerAllModules();
 
@@ -18,19 +21,11 @@ const hotAtom = atom([
 function Ppto() {
   const [tableData, setTableData] = useAtom(hotAtom);
   const hotRef = useRef<HotTableRef>(null);
-  const testData = { text: "this is a test string" };
+  const hyperformulaInstance = HyperFormula.buildEmpty({
+    licenseKey: "internal-use-in-handsontable",
+  });
 
-  async function sendData(data: { text: string }) {
-    try {
-      await axios.post("http://127.0.0.1:8000/test", data, {
-        headers: { "Content-Type": "application/json" },
-      });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  }
-
-  async function sendTable(data: any[]) {
+  async function sendTableData(data: Handsontable.CellValue[]) {
     try {
       await axios.post(
         "http://127.0.0.1:8000/ppto",
@@ -44,25 +39,33 @@ function Ppto() {
     }
   }
 
-  return (
-    <div className="flex grow flex-col overflow-clip">
-      <span className="p-4 text-3xl">Presupuesto</span>
-      <div className="ht-theme-main-dark-auto flex-grow overflow-y-auto p-0">
-        <button onClick={() => sendData(testData)}>Click me to test!</button>
+  function calcCols(table: Handsontable.CellValue[]) {
+    return table.map((row, index) => {
+      if (index < table.length - 1) {
+        row[5] = `=D${index + 1}*E${index + 1}`;
+      }
+      return row;
+    });
+  }
 
+  return (
+    <div className="flex h-full w-full flex-col bg-green-400">
+      <span className="p-4 text-3xl">Presupuesto</span>
+      <div className="ht-theme-main-dark-auto overflow-y-auto">
         <HotTable
           ref={hotRef}
+          formulas={{
+            engine: hyperformulaInstance,
+          }}
           afterChange={function (
             changes: Handsontable.CellChange[] | null,
             source: Handsontable.ChangeSource,
           ) {
             const hot = hotRef.current?.hotInstance;
             if (changes && source !== "loadData" && hot) {
-              const newData = hot.getData();
-              console.log(newData);
-              setTableData(newData);
-              sendData({ text: "this is another string" });
-              sendTable(newData);
+              const newTable = calcCols(hot.getData());
+              setTableData(newTable);
+              sendTableData(newTable);
             }
           }}
           data={tableData}

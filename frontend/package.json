@@ -7,15 +7,18 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "tauri": "tauri"
   },
   "dependencies": {
     "@handsontable/react": "^15.1.0",
     "@handsontable/react-wrapper": "^15.2.0",
     "@tailwindcss/vite": "^4.0.14",
     "@tauri-apps/api": "^2.4.0",
+    "@tauri-apps/plugin-global-shortcut": "^2.2.0",
     "axios": "^1.8.4",
     "handsontable": "^15.2.0",
+    "hyperformula": "^3.0.0",
     "jotai": "^2.12.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
