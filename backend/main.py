@@ -53,6 +53,8 @@ async def get_ppto(ppto: Hot):
     df = pl.DataFrame(
         matrix,
         schema={
+            "Level": pl.Int32,
+            "Tipo": pl.String,
             "Item": pl.String,
             "Descripción": pl.String,
             "Unidad": pl.String,

@@ -11,11 +11,16 @@ import { HyperFormula } from "hyperformula";
 registerAllModules();
 
 const hotAtom = atom([
-  ["1", "Obras Provisionales", "glb", 1, 2, 2],
-  ["2", "Arquitectura", "m²", 1, 2, 2],
-  ["3", "Estructuras", "m³", 1, 2, 2],
-  ["4", "Instalaciones Sanitarias", "m", 1, 2, 2],
-  ["5", "Instalaciones Eléctricas", "m", 1, 2, 2],
+  [1, , , "Título 1", "glb", 1, 2, 2],
+  [1, , , "Título 2", "m²", 1, 2, 2],
+  [2, , , "Título 2.1", "m³", 1, 2, 2],
+  [3, , , "Partida 2.1.1", "m", 1, 2, 2],
+  [2, , , "Título 2.2", "m³", 1, 2, 2],
+  [3, , , "Partida 2.2.1", "m", 1, 2, 2],
+  [3, , , "Partida 2.2.2", "m", 1, 2, 2],
+  [1, , , "Título 3", "m", 1, 2, 2],
+  [2, , , "Partida 3.1", "m", 1, 2, 2],
+  [2, , , "Partida 3.2", "m", 1, 2, 2],
 ]);
 
 function Ppto() {
@@ -39,38 +44,68 @@ function Ppto() {
     }
   }
 
-  function calcCols(table: Handsontable.CellValue[]) {
+  function calcSheet(table: Handsontable.CellValue[]) {
     return table.map((row, index) => {
+      // level logic (fixed)
+      if (row[0] === null && index < table.length - 1) {
+        if (index === 0) {
+          row[0] = 1;
+        } else {
+          row[0] = table[index - 1][0];
+        }
+      }
+      // título/partida logic
+      if (index === 0) {
+        row[1] = "Título"; // first row is always título
+      }
+      if (index < table.length - 1 && index > 0) {
+        if (table[index][0] >= table[index + 1][0]) {
+          row[1] = "Partida";
+        } else {
+          row[1] = "Título";
+        }
+      }
+      // calculates parcial column
       if (index < table.length - 1) {
-        row[5] = `=D${index + 1}*E${index + 1}`;
+        row[7] = `=F${index + 1}*G${index + 1}`;
       }
       return row;
     });
   }
 
+  function calcItems(table: Handsontable.CellValue[]) {
+    for (let row = 0; row < table.length - 1; row++) {}
+  }
+
   return (
     <div className="flex h-full w-full flex-col bg-green-400">
       <span className="p-4 text-3xl">Presupuesto</span>
+      {/* Hands On Table Component */}
       <div className="ht-theme-main-dark-auto overflow-y-auto">
         <HotTable
           ref={hotRef}
           formulas={{
             engine: hyperformulaInstance,
           }}
+          // hot reloads the sheet with every change
           afterChange={function (
             changes: Handsontable.CellChange[] | null,
             source: Handsontable.ChangeSource,
           ) {
             const hot = hotRef.current?.hotInstance;
             if (changes && source !== "loadData" && hot) {
-              const newTable = calcCols(hot.getData());
+              let newTable = hot.getData();
+              newTable = calcSheet(newTable);
+              calcItems(newTable);
               setTableData(newTable);
               sendTableData(newTable);
             }
           }}
           data={tableData}
           columns={[
-            { col: "Item", className: "htLeft" },
+            { index: "Level", type: "numeric" },
+            { index: "Tipo", type: "text" },
+            { index: "Item", className: "htLeft" },
             { index: "Descripción", className: "htLeft", type: "text" },
             { index: "Und", className: "htCenter", type: "text" },
             {
@@ -104,7 +139,16 @@ function Ppto() {
             },
           ]}
           rowHeaders={false}
-          colHeaders={["Item", "Descripción", "Und", "Metrado", "Precio", "Parcial"]}
+          colHeaders={[
+            "Level",
+            "Tipo",
+            "Item",
+            "Descripción",
+            "Und",
+            "Metrado",
+            "Precio",
+            "Parcial",
+          ]}
           autoWrapRow={true}
           autoWrapCol={true}
           licenseKey="non-commercial-and-evaluation"
